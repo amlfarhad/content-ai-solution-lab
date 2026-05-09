@@ -1,0 +1,60 @@
+{
+  "content_items": [
+    {
+      "item_id": "CNT-1001",
+      "title": "Master Services Agreement - Acme Robotics",
+      "content_type": "contract",
+      "department": "Legal",
+      "sensitivity": "confidential",
+      "lifecycle_stage": "draft",
+      "owner": "Maya Chen",
+      "text": "Draft MSA covering renewal terms, liability language, data protection clauses, and approval steps for a strategic robotics customer.",
+      "metadata": {"region": "US", "value_band": "enterprise"}
+    },
+    {
+      "item_id": "CNT-1002",
+      "title": "Q3 Field Services Invoice Batch",
+      "content_type": "invoice",
+      "department": "Finance",
+      "sensitivity": "internal",
+      "lifecycle_stage": "submitted",
+      "owner": "Arjun Patel",
+      "text": "Invoice packet requiring AP validation, duplicate checks, vendor code matching, and payment routing before month-end close.",
+      "metadata": {"region": "US", "amount_band": "mid-market"}
+    },
+    {
+      "item_id": "CNT-1003",
+      "title": "Employee Compensation Change Request",
+      "content_type": "employee_record",
+      "department": "People",
+      "sensitivity": "restricted",
+      "lifecycle_stage": "review",
+      "owner": "Elena Torres",
+      "text": "Confidential compensation change request with manager approval notes, effective date, and HR operations action items.",
+      "metadata": {"region": "US", "policy": "people-confidential"}
+    },
+    {
+      "item_id": "CNT-1004",
+      "title": "Product Launch Readiness Checklist",
+      "content_type": "checklist",
+      "department": "Product",
+      "sensitivity": "internal",
+      "lifecycle_stage": "active",
+      "owner": "Jordan Miles",
+      "text": "Cross-functional launch checklist tracking approvals from product marketing, legal, sales enablement, and customer support.",
+      "metadata": {"region": "Global", "release": "spring"}
+    },
+    {
+      "item_id": "CNT-1005",
+      "title": "Customer Security Questionnaire",
+      "content_type": "questionnaire",
+      "department": "Security",
+      "sensitivity": "confidential",
+      "lifecycle_stage": "customer_response",
+      "owner": "Priya Raman",
+      "text": "Security questionnaire response covering access control, encryption, retention, audit logging, incident response, and compliance posture.",
+      "metadata": {"region": "Global", "framework": "SOC2"}
+    }
+  ]
+}
+

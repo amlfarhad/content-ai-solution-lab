@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "content-ai-solution-lab"
+version = "0.1.0"
+description = "Customer-facing solutions engineering lab for AI content workflows."
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [{ name = "Amal Farhad Shaji" }]
+dependencies = []
+
+[project.scripts]
+content-solution = "content_ai_solution_lab.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["content_ai_solution_lab*"]
+

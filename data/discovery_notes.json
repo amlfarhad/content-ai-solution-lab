@@ -1,0 +1,29 @@
+{
+  "discovery_signals": [
+    {
+      "stakeholder": "VP Sales Operations",
+      "business_problem": "Contract approvals are slow because sales teams cannot find the latest template or route exceptions to the right legal owner.",
+      "current_state": "Teams use email, shared drives, and Slack handoffs with limited visibility into approval status.",
+      "desired_outcome": "Automate routing, expose approval status, and reduce manual follow-up before quarter close.",
+      "systems": ["CRM", "Slack", "shared drive", "e-signature"],
+      "compliance_needs": ["approval audit trail", "restricted access"]
+    },
+    {
+      "stakeholder": "Finance Operations Lead",
+      "business_problem": "Invoice packets arrive with inconsistent metadata and require manual duplicate checks.",
+      "current_state": "AP analysts copy document details into spreadsheets and chase missing vendor context.",
+      "desired_outcome": "Classify invoices, enrich metadata, and create a governed workflow for validation.",
+      "systems": ["ERP", "email", "shared drive"],
+      "compliance_needs": ["retention policy", "payment approval trail"]
+    },
+    {
+      "stakeholder": "IT Business Partner",
+      "business_problem": "Business leaders want AI search and summaries but need confidence that sensitive content remains governed.",
+      "current_state": "Content permissions and lifecycle stages are hard to explain during stakeholder reviews.",
+      "desired_outcome": "Demonstrate AI-assisted search, summaries, and workflow recommendations with visible governance controls.",
+      "systems": ["identity provider", "content repository", "BI dashboard"],
+      "compliance_needs": ["least privilege", "audit logging", "data retention"]
+    }
+  ]
+}
+
