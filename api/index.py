@@ -5,16 +5,13 @@ from http.server import BaseHTTPRequestHandler
 from content_ai_solution_lab.web import DemoApplication
 
 
-application = DemoApplication()
-
-
 class handler(BaseHTTPRequestHandler):  # noqa: N801 - Vercel's Python function contract
     def do_GET(self) -> None:  # noqa: N802
-        self._respond(*application.handle("GET", self.path))
+        self._respond(*DemoApplication().handle("GET", self.path))
 
     def do_POST(self) -> None:  # noqa: N802
         length = int(self.headers.get("Content-Length", "0"))
-        self._respond(*application.handle("POST", self.path, self.rfile.read(length)))
+        self._respond(*DemoApplication().handle("POST", self.path, self.rfile.read(length)))
 
     def log_message(self, _format: str, *_args: object) -> None:
         return
