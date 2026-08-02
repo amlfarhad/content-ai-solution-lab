@@ -11,6 +11,7 @@ from .discovery import extract_solution_themes, load_discovery_signals
 from .models import DemoScenario
 from .platform import ContentPlatformMock
 from .solution import build_recommendations
+from .workflow import run_workflow
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
@@ -55,6 +56,7 @@ def cmd_demo(args: argparse.Namespace) -> None:
     brief_path = REPORTS_DIR / "solution_brief.md"
     dashboard_path = REPORTS_DIR / "demo_dashboard.html"
     audit_path = REPORTS_DIR / "agent_audit_log.json"
+    workflow_path = REPORTS_DIR / "sample_workflow_run.json"
 
     platform = ContentPlatformMock(scenario.content_items)
     agent = ContentAIAgent(platform)
@@ -62,12 +64,34 @@ def cmd_demo(args: argparse.Namespace) -> None:
         if item.sensitivity in {"confidential", "restricted"}:
             agent.prepare_approval_packet(item.item_id)
     platform.export_audit_log(audit_path)
+    workflow_path.write_text(
+        json.dumps(
+            run_workflow(scenario.content_items, [item.item_id for item in scenario.content_items]),
+            indent=2,
+            default=list,
+        ),
+        encoding="utf-8",
+    )
 
     write_solution_brief(scenario, brief_path)
     write_demo_dashboard(scenario, dashboard_path)
     print(f"Wrote {brief_path}")
     print(f"Wrote {dashboard_path}")
     print(f"Wrote {audit_path}")
+    print(f"Wrote {workflow_path}")
+
+
+def cmd_web(args: argparse.Namespace) -> None:
+    from .web import create_server
+
+    server = create_server(args.host, args.port)
+    print(f"Content AI Solution Lab running at http://{args.host}:{args.port}")
+    try:
+        server.serve_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        server.server_close()
 
 
 def parser() -> argparse.ArgumentParser:
@@ -82,6 +106,10 @@ def parser() -> argparse.ArgumentParser:
     agent.add_argument("item_id")
     agent.set_defaults(func=cmd_agent)
     sub.add_parser("demo", help="Generate a solution brief, demo dashboard, and audit log.").set_defaults(func=cmd_demo)
+    web = sub.add_parser("web", help="Serve the no-login browser workbench.")
+    web.add_argument("--host", default="127.0.0.1")
+    web.add_argument("--port", type=int, default=8000)
+    web.set_defaults(func=cmd_web)
     return p
 
 
@@ -92,4 +120,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

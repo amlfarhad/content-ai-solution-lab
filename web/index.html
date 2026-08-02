@@ -1,0 +1,239 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="A no-login solutions engineering demo for governed AI content workflows.">
+    <title>Content AI / Solution Lab</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="styles.css">
+    <script src="demo-data.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#workspace">Skip to workflow</a>
+    <div class="app-shell">
+      <header class="topbar">
+        <a class="wordmark" href="#top" aria-label="Content AI Solution Lab home">
+          <span class="wordmark-mark" aria-hidden="true">◈</span>
+          <span>CONTENT <i>/</i> AI <i>/</i> SOLUTION LAB</span>
+        </a>
+        <div class="topbar-meta">
+          <span class="env-tag">PUBLIC DEMO</span>
+          <a class="repo-link" href="https://github.com/amalfarhad/content-ai-solution-lab" target="_blank" rel="noreferrer">
+            <span aria-hidden="true">↗</span> GitHub
+          </a>
+        </div>
+      </header>
+
+      <main id="workspace">
+        <section class="hero" id="top" aria-labelledby="hero-title">
+          <div class="hero-copy">
+            <p class="kicker"><span class="pulse-dot" aria-hidden="true"></span> NO-LOGIN SAMPLE ENGAGEMENT <span class="slash">/</span> 05 STAGES</p>
+            <h1 id="hero-title">From messy content<br><em>to a governed decision.</em></h1>
+            <p class="hero-lede">A solutions-engineering walkthrough for Northstar Manufacturing: turn discovery notes into a configured content workflow, run representative items through explainable policy logic, and leave the customer with an implementation-ready handoff.</p>
+            <div class="hero-actions">
+              <button class="button button-primary" type="button" data-scroll-to="stage-catalog">Run the sample <span aria-hidden="true">↓</span></button>
+              <a class="button button-quiet" href="https://github.com/amalfarhad/content-ai-solution-lab" target="_blank" rel="noreferrer">Inspect the artifact <span aria-hidden="true">↗</span></a>
+            </div>
+          </div>
+          <div class="hero-signal" aria-label="Demo provider status">
+            <div class="signal-header">
+              <span class="mono-label">PROVIDER SIGNAL</span>
+              <button class="text-button" id="provider-toggle" type="button" aria-pressed="false">Simulate issue</button>
+            </div>
+            <div class="signal-body" id="health-status" aria-live="polite">
+              <span class="signal-icon signal-icon-loading" aria-hidden="true">…</span>
+              <div>
+                <strong>Connecting to mock provider</strong>
+                <p>Loading the engagement contract and sample catalog.</p>
+              </div>
+            </div>
+            <div class="signal-footer">
+              <span>DETERMINISTIC</span>
+              <span>NO CREDENTIALS</span>
+              <span>SAFE TO INSPECT</span>
+            </div>
+          </div>
+        </section>
+
+        <nav class="journey-nav" aria-label="Engagement stages">
+          <button class="journey-step is-active" type="button" data-scroll-to="stage-brief"><span>01</span><b>Understand</b><small>Customer brief</small></button>
+          <button class="journey-step" type="button" data-scroll-to="stage-discovery"><span>02</span><b>Map</b><small>Requirements + flow</small></button>
+          <button class="journey-step" type="button" data-scroll-to="stage-catalog"><span>03</span><b>Configure</b><small>Representative content</small></button>
+          <button class="journey-step" type="button" data-scroll-to="stage-ops"><span>04</span><b>Evaluate</b><small>Decision operations</small></button>
+          <button class="journey-step" type="button" data-scroll-to="stage-handoff"><span>05</span><b>Handoff</b><small>Implementation plan</small></button>
+        </nav>
+
+        <section class="stage stage-brief" id="stage-brief" aria-labelledby="brief-title">
+          <div class="stage-heading">
+            <div>
+              <p class="section-index">01 / CUSTOMER BRIEF</p>
+              <h2 id="brief-title">Start with the operating reality.</h2>
+            </div>
+            <p class="stage-note">The demo keeps the customer problem in view while the workflow is configured.</p>
+          </div>
+          <div class="brief-grid">
+            <article class="brief-card brief-card-dark">
+              <p class="card-label">CUSTOMER SCENARIO</p>
+              <div class="customer-lockup">
+                <span class="customer-code">NSM</span>
+                <div><h3 id="customer-name">Northstar Manufacturing</h3><p id="customer-industry">Manufacturing and field services</p></div>
+              </div>
+              <p class="scenario-copy">Content-heavy work is moving across Legal, Finance, People, Product, and Security. The team wants faster routing and AI assistance without making sensitive decisions invisible.</p>
+              <div class="scenario-tags"><span>DISCOVERY-LED</span><span>GOVERNANCE-FIRST</span><span>HANDOFF-READY</span></div>
+            </article>
+            <div class="brief-card requirements-card">
+              <div class="card-topline"><p class="card-label">REQUIREMENTS OBSERVED</p><span class="count-badge" id="requirements-count">—</span></div>
+              <div class="requirements-list" id="requirements-list" aria-live="polite"></div>
+            </div>
+            <aside class="brief-card brief-card-accent">
+              <p class="card-label">DEMO BOUNDARY</p>
+              <div class="boundary-quote">“Show the decision path, not a black box.”</div>
+              <p>This is a local, deterministic sample. It does not connect to a customer tenant, use production content, or claim measured business impact.</p>
+              <a href="https://github.com/amalfarhad/content-ai-solution-lab/blob/master/docs/architecture.md" target="_blank" rel="noreferrer" class="inline-link">Read architecture notes <span aria-hidden="true">↗</span></a>
+            </aside>
+          </div>
+        </section>
+
+        <section class="stage" id="stage-discovery" aria-labelledby="discovery-title">
+          <div class="stage-heading">
+            <div>
+              <p class="section-index">02 / DISCOVERY MAP</p>
+              <h2 id="discovery-title">Requirements become a solution shape.</h2>
+            </div>
+            <p class="stage-note">Each signal is connected to a workflow decision, a control, and a measurable pilot question.</p>
+          </div>
+          <div class="discovery-layout">
+            <div class="discovery-grid" id="discovery-grid" aria-live="polite"></div>
+            <aside class="theme-panel">
+              <div class="card-topline"><p class="card-label">SIGNAL STRENGTH</p><span class="mono-label">DISCOVERY NOTES</span></div>
+              <div id="theme-bars" class="theme-bars" aria-label="Discovery theme counts"></div>
+              <div class="theme-callout"><span class="callout-mark">↳</span><p>Governance and automation are the strongest signals. The pilot therefore makes review boundaries visible before optimizing throughput.</p></div>
+            </aside>
+          </div>
+          <div class="workflow-map" aria-label="Workflow mapping">
+            <div class="map-node"><span class="map-number">A</span><b>Discovery</b><small>business pain + constraints</small></div>
+            <span class="map-arrow" aria-hidden="true">→</span>
+            <div class="map-node"><span class="map-number">B</span><b>Content API</b><small>items + metadata</small></div>
+            <span class="map-arrow" aria-hidden="true">→</span>
+            <div class="map-node map-node-highlight"><span class="map-number">C</span><b>Policy engine</b><small>classify + explain</small></div>
+            <span class="map-arrow" aria-hidden="true">→</span>
+            <div class="map-node"><span class="map-number">D</span><b>Human gate</b><small>approve or block</small></div>
+            <span class="map-arrow" aria-hidden="true">→</span>
+            <div class="map-node"><span class="map-number">E</span><b>Handoff</b><small>measure + roll out</small></div>
+          </div>
+        </section>
+
+        <section class="stage catalog-stage" id="stage-catalog" aria-labelledby="catalog-title">
+          <div class="stage-heading">
+            <div>
+              <p class="section-index">03 / CONTENT WORKBENCH</p>
+              <h2 id="catalog-title">Choose the evidence for the conversation.</h2>
+            </div>
+            <p class="stage-note">Representative metadata only. The unsafe exception is intentional: a governed demo needs a boundary case.</p>
+          </div>
+          <div class="catalog-toolbar">
+            <div class="toolbar-group">
+              <label class="field-label" for="catalog-search">Search content</label>
+              <input id="catalog-search" class="field-input search-input" type="search" placeholder="Try “security” or “invoice”" autocomplete="off">
+            </div>
+            <div class="toolbar-group compact-field">
+              <label class="field-label" for="department-filter">Department</label>
+              <select id="department-filter" class="field-input"><option value="">All departments</option></select>
+            </div>
+            <div class="toolbar-group compact-field">
+              <label class="field-label" for="sensitivity-filter">Sensitivity</label>
+              <select id="sensitivity-filter" class="field-input"><option value="">All levels</option></select>
+            </div>
+            <button class="text-button reset-button" id="reset-filters" type="button">Reset filters</button>
+          </div>
+          <div class="catalog-meta">
+            <div><span class="selected-count" id="selected-count">0 selected</span><span class="catalog-total" id="catalog-total">Loading catalog…</span></div>
+            <div class="catalog-actions">
+              <button class="button button-small button-quiet" id="select-sample" type="button">Use sample engagement</button>
+              <button class="button button-small button-quiet" id="select-all" type="button">Select visible</button>
+              <button class="button button-small button-danger-quiet" id="clear-selection" type="button">Clear</button>
+            </div>
+          </div>
+          <div class="catalog-table-wrap">
+            <table class="catalog-table">
+              <caption class="sr-only">Representative content catalog</caption>
+              <thead><tr><th scope="col" class="check-col"><span class="sr-only">Select</span></th><th scope="col">Content item</th><th scope="col">Owner / dept</th><th scope="col">Sensitivity</th><th scope="col">Lifecycle</th><th scope="col">Policy preview</th></tr></thead>
+              <tbody id="catalog-body"><tr><td colspan="6"><div class="table-loading"><span class="loading-bar"></span><span class="loading-bar short"></span><span class="loading-bar"></span></div></td></tr></tbody>
+            </table>
+            <div class="empty-state" id="catalog-empty" hidden>
+              <span class="empty-icon" aria-hidden="true">⌕</span>
+              <strong>No content matches those filters.</strong>
+              <p>Reset the view or search for a different content signal.</p>
+              <button class="text-button" type="button" data-reset-filters>Reset filters</button>
+            </div>
+          </div>
+          <div class="run-callout" id="run-callout">
+            <div class="run-callout-mark" aria-hidden="true">◎</div>
+            <div><strong>Ready to test the decision path?</strong><p>Select at least one item. The run will apply mock metadata, create an internal link for safe items, and route sensitive or unsafe items to a visible human gate.</p></div>
+            <button class="button button-primary" id="run-workflow" type="button">Run policy workflow <span aria-hidden="true">↗</span></button>
+          </div>
+        </section>
+
+        <section class="stage operations-stage" id="stage-ops" aria-labelledby="ops-title">
+          <div class="stage-heading">
+            <div>
+              <p class="section-index">04 / OPERATIONS VIEW</p>
+              <h2 id="ops-title">Every item lands somewhere for a reason.</h2>
+            </div>
+            <div class="run-status" id="run-status" aria-live="polite"><span class="status-dot"></span><span>No run yet</span></div>
+          </div>
+          <div class="ops-summary" id="run-summary">
+            <div class="ops-summary-empty"><span class="empty-icon" aria-hidden="true">◌</span><div><strong>Decision operations will appear here.</strong><p>Run the sample engagement above to see automatic, review, and blocked queues.</p></div></div>
+          </div>
+          <div class="queue-grid" id="queue-grid" aria-live="polite"></div>
+          <div class="operations-lower">
+            <article class="detail-panel" id="detail-panel">
+              <div class="panel-heading"><p class="card-label">DECISION DETAIL</p><span class="mono-label" id="detail-id">SELECT AN ITEM</span></div>
+              <div class="detail-empty" id="detail-empty"><span class="detail-glyph" aria-hidden="true">↗</span><strong>Click a decision card to inspect its path.</strong><p>Confidence, policy flags, rationale, action, and the mapped approver stay together in the run record.</p></div>
+              <div id="detail-content" hidden></div>
+            </article>
+            <article class="audit-panel">
+              <div class="panel-heading"><p class="card-label">AUDIT TRAIL</p><span class="mono-label" id="audit-count">0 EVENTS</span></div>
+              <ol class="audit-list" id="audit-list"><li class="audit-empty">No actions recorded yet.</li></ol>
+            </article>
+          </div>
+          <article class="evaluation-panel">
+            <div class="evaluation-heading"><div><p class="card-label">SAMPLE EVALUATION</p><h3>Controls are part of the acceptance criteria.</h3></div><span class="evaluation-score" id="evaluation-score">— / —</span></div>
+            <div class="evaluation-controls" id="evaluation-controls"><div class="evaluation-empty">The policy checks will appear after a run.</div></div>
+            <p class="disclaimer">Evaluation evidence is deterministic sample behavior, not a customer outcome or production benchmark.</p>
+          </article>
+        </section>
+
+        <section class="stage handoff-stage" id="stage-handoff" aria-labelledby="handoff-title">
+          <div class="stage-heading">
+            <div>
+              <p class="section-index">05 / IMPLEMENTATION HANDOFF</p>
+              <h2 id="handoff-title">Close with a path to reality.</h2>
+            </div>
+            <p class="stage-note">The artifact ends where a solutions engineer should: with owners, contracts, boundaries, and pilot questions.</p>
+          </div>
+          <div class="handoff-grid" id="handoff-grid"></div>
+          <div class="handoff-bottom">
+            <article class="mapping-panel">
+              <div class="panel-heading"><p class="card-label">API / DATA MAPPING</p><span class="mono-label">CONTRACT SHAPE</span></div>
+              <div class="mapping-list" id="api-mapping"></div>
+            </article>
+            <article class="boundary-panel">
+              <div class="panel-heading"><p class="card-label">SECURITY + PRIVACY BOUNDARIES</p><span class="mono-label">BEFORE PILOT</span></div>
+              <ul id="boundaries"></ul>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="footer">
+        <div><span class="wordmark-mark" aria-hidden="true">◈</span> CONTENT AI / SOLUTION LAB</div>
+        <p>Customer-facing workflow demo · mock provider · <a href="https://github.com/amalfarhad/content-ai-solution-lab" target="_blank" rel="noreferrer">view source on GitHub ↗</a></p>
+      </footer>
+    </div>
+
+    <noscript><div class="noscript-banner">This browser demo needs JavaScript to run the sample workflow. The repository includes the full Python contracts and CLI fallback.</div></noscript>
+  </body>
+</html>

@@ -12,12 +12,15 @@
 
 ## Product Walkthrough
 
-1. Run `content-solution discovery` to show the themes extracted from stakeholder notes.
-2. Run `content-solution catalog` to show the content mix and sensitivity distribution.
-3. Run `content-solution agent CNT-1001` to classify a contract, recommend a retention policy, summarize the document, and route it to Legal Ops.
-4. Run `content-solution demo` to generate the customer-facing dashboard and solution brief.
+1. Open the no-login browser workbench and establish the Northstar scenario, requirements, and explicit mock-provider boundary.
+2. Walk the discovery map: stakeholder pain, desired state, source systems, and compliance needs.
+3. Select the sample engagement: a contract, an internal invoice, a security questionnaire, and the unsafe contractor-access exception.
+4. Run the policy workflow. Show the invoice proceeding automatically, sensitive items waiting for human review, and `CNT-1006` blocked with a Security escalation because its request includes credential, access, and approval-bypass signals.
+5. Open a decision card to show confidence, retention, flags, rationale, next action, and mapped approver. Then show the audit trail and four sample evaluation controls.
+6. Close with API/data mapping, pilot measures, security/privacy boundaries, and the three-phase implementation handoff.
+
+For the CLI version, run `content-solution discovery`, `content-solution catalog`, `content-solution agent CNT-1001`, and `content-solution demo`.
 
 ## Close
 
 "This project is not trying to mimic a private product tenant. It demonstrates how I would prepare for a solutions-engineering conversation: understand the customer workflow, map business pain to platform capabilities, show API and AI-agent mechanics, and close with success metrics and governance."
-

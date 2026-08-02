@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from .governance import evaluate_content_item
 from .models import ContentItem
 from .platform import ContentPlatformMock
 
@@ -9,38 +10,37 @@ class ContentAIAgent:
         self.platform = platform
 
     def classify_item(self, item: ContentItem) -> dict[str, str]:
-        text = f"{item.title} {item.text}".lower()
-        if "invoice" in text or "payment" in text:
-            queue = "finance-automation"
-            retention = "7-year-finance"
-        elif "contract" in text or "msa" in text:
-            queue = "legal-review"
-            retention = "contract-lifecycle"
-        elif "employee" in text or "compensation" in text:
-            queue = "hr-confidential"
-            retention = "employee-record"
-        else:
-            queue = "business-owner-review"
-            retention = "standard-business"
-
-        confidence = "high" if item.sensitivity in {"confidential", "restricted"} else "medium"
+        decision = evaluate_content_item(item)
         return {
-            "classification": queue,
-            "retention_policy": retention,
-            "confidence": confidence,
+            "classification": str(decision["classification"]),
+            "retention_policy": str(decision["retention_policy"]),
+            "confidence": str(decision["confidence"]),
         }
+
+    def evaluate_item(self, item: ContentItem) -> dict[str, object]:
+        return evaluate_content_item(item)
 
     def prepare_approval_packet(self, item_id: str) -> dict[str, object]:
         item = self.platform.get_item(item_id)
-        classification = self.classify_item(item)
+        decision = self.evaluate_item(item)
+        classification = {
+            key: str(decision[key])
+            for key in ("classification", "retention_policy", "confidence")
+        }
         updated = self.platform.update_metadata(item_id, **classification)
-        approver = self._select_approver(updated)
-        approval = self.platform.route_for_approval(item_id, approver)
+        approver = str(decision["approver"] or self._select_approver(updated))
+        approval = self.platform.route_for_approval(
+            item_id,
+            approver,
+            status="blocked_pending_review" if decision["disposition"] == "blocked" else "pending_review",
+            reason=str(decision["rationale"]),
+        )
         return {
             "item": updated.title,
             "classification": classification,
             "approval": approval,
             "summary": self.summarize_item(updated),
+            "decision": decision,
         }
 
     def summarize_item(self, item: ContentItem) -> str:
@@ -57,4 +57,3 @@ class ContentAIAgent:
         if item.department == "People":
             return "people-ops@example.com"
         return f"{item.owner.lower().replace(' ', '.')}@example.com"
-

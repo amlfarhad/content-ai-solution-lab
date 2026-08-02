@@ -54,7 +54,17 @@
       "owner": "Priya Raman",
       "text": "Security questionnaire response covering access control, encryption, retention, audit logging, incident response, and compliance posture.",
       "metadata": {"region": "Global", "framework": "SOC2"}
+    },
+    {
+      "item_id": "CNT-1006",
+      "title": "Urgent Contractor Access Exception",
+      "content_type": "security_exception",
+      "department": "Security",
+      "sensitivity": "restricted",
+      "lifecycle_stage": "exception_request",
+      "owner": "Priya Raman",
+      "text": "Urgent exception asks an external contractor to bypass approval and share a temporary production password through a public link. The request has unclear business owner context and must not be circulated.",
+      "metadata": {"region": "Global", "policy": "security-exception", "source": "sample-only"}
     }
   ]
 }
-

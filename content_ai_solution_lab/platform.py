@@ -45,15 +45,28 @@ class ContentPlatformMock:
         self._audit("shared_link.created", item.item_id, f"Audience={audience}")
         return link
 
-    def route_for_approval(self, item_id: str, approver: str) -> dict[str, str]:
+    def route_for_approval(
+        self,
+        item_id: str,
+        approver: str,
+        *,
+        status: str = "pending_review",
+        reason: str = "",
+    ) -> dict[str, str]:
         item = self.get_item(item_id)
-        self._audit("approval.routed", item.item_id, f"Approver={approver}")
-        return {
+        detail = f"Approver={approver}; Status={status}"
+        if reason:
+            detail += f"; Reason={reason}"
+        self._audit("approval.routed", item.item_id, detail)
+        packet = {
             "item_id": item.item_id,
             "title": item.title,
             "approver": approver,
-            "status": "pending_review",
+            "status": status,
         }
+        if reason:
+            packet["reason"] = reason
+        return packet
 
     def audit_log(self) -> tuple[dict[str, str], ...]:
         return tuple(self._audit_log)
@@ -66,4 +79,3 @@ class ContentPlatformMock:
 
     def snapshot(self) -> list[dict[str, object]]:
         return [asdict(item) for item in self._items.values()]
-
