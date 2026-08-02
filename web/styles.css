@@ -215,6 +215,9 @@ h2 { margin: 0; font: 800 clamp(28px, 3.2vw, 46px)/1.04 var(--display); letter-s
 .run-callout-mark { display: grid; place-items: center; flex: 0 0 34px; width: 34px; height: 34px; border: 1px solid #9dc35d; border-radius: 50%; color: #52721a; font-size: 18px; }
 .run-callout strong { display: block; color: #3c5517; font-size: 13px; }
 .run-callout p { margin: 3px 0 0; color: #61753c; font-size: 12px; line-height: 1.4; }
+.run-mode-control { flex: 0 0 190px; }
+.run-mode-control .field-label { color: #61753c; }
+.run-mode-control .field-input { height: 38px; border-color: #b6d47d; background: rgba(251,252,248,.82); color: #3c5517; font-size: 11px; }
 .run-callout .button { margin-left: auto; flex: 0 0 auto; }
 .run-callout.is-error { border-color: #efb4ad; background: var(--red-soft); }
 .run-callout.is-error .run-callout-mark { border-color: #df8e84; color: #a74d49; }
@@ -373,6 +376,7 @@ h2 { margin: 0; font: 800 clamp(28px, 3.2vw, 46px)/1.04 var(--display); letter-s
   .catalog-meta { display: block; }
   .catalog-actions { justify-content: flex-start; margin-top: 12px; }
   .run-callout { align-items: flex-start; flex-wrap: wrap; }
+  .run-mode-control { width: calc(100% - 49px); margin-left: 49px; flex-basis: auto; }
   .run-callout .button { margin-left: 49px; }
   .summary-metrics { grid-template-columns: repeat(2, 1fr); }
   .summary-metric.metric-run { grid-column: span 2; }

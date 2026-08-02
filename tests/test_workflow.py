@@ -59,6 +59,16 @@ class WorkflowContractTests(unittest.TestCase):
         self.assertEqual(run["results"][1]["status"], "failed")
         self.assertTrue(run["evaluation"]["controls"][-1]["passed"])
 
+    def test_dry_run_projects_actions_without_provider_side_effects(self):
+        run = run_workflow(self.items, ["CNT-1002"], mode="dry_run")
+        result = run["results"][0]
+
+        self.assertEqual(run["mode"], "dry_run")
+        self.assertEqual(run["audit_log"], [])
+        self.assertEqual(result["actions"]["metadata_update"]["status"], "projected")
+        self.assertEqual(result["actions"]["shared_link"]["status"], "projected")
+        self.assertNotIn("metadata_updated", result["actions"])
+
     def test_web_api_preserves_contract_and_rejects_invalid_input(self):
         application = DemoApplication()
         status, _, scenario = application.handle("GET", "/api/scenario")
@@ -77,6 +87,14 @@ class WorkflowContractTests(unittest.TestCase):
         )
         self.assertEqual(status, 200)
         self.assertEqual(payload["status"], "partial")
+
+        status, _, payload = application.handle("GET", "/api/content/CNT-1006/evaluation")
+        self.assertEqual(status, 200)
+        self.assertEqual(payload["decision"]["disposition"], "blocked")
+
+        status, _, payload = application.handle("POST", "/api/run", b"not-json")
+        self.assertEqual(status, 400)
+        self.assertIn("valid JSON", payload["error"])
 
     def test_platform_route_contract_supports_reasoned_status(self):
         platform = ContentPlatformMock(self.items)

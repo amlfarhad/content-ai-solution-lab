@@ -44,7 +44,7 @@ Returns one content item and its deterministic governance decision. A decision i
 
 ### `POST /api/run`
 
-Accepts `{ "item_ids": ["CNT-1001"], "mode": "simulation" }`. The server returns a deterministic `run_id`, summary counts, per-item results, evaluation controls, and the audit log. `mode` may be `simulation` or `dry_run`. Invalid payloads return `400` or `422`; unknown item IDs are isolated as `failed` results so mixed runs can return `status: partial`.
+Accepts `{ "item_ids": ["CNT-1001"], "mode": "simulation" }`. The server returns a deterministic `run_id`, summary counts, per-item results, evaluation controls, and the audit log. `mode` may be `simulation` or `dry_run`: simulation applies mock provider actions in memory, while dry run returns projected actions and writes no metadata, links, approvals, or audit events. Invalid payloads return `400` or `422`; unknown item IDs are isolated as `failed` results so mixed runs can return `status: partial`.
 
 ### Disposition contract
 

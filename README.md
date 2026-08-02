@@ -39,6 +39,8 @@ content-solution web --port 8765
 
 Open `http://127.0.0.1:8765/` for the no-login browser workbench. The same app can be served with `python -m content_ai_solution_lab.web --port 8765`.
 
+The deployed public product is [content-ai-solution-lab.vercel.app](https://content-ai-solution-lab.vercel.app). It includes a visible GitHub source link and uses the Python API when available, with a clearly labeled seeded browser fallback for static-only environments.
+
 The demo command writes:
 
 - `reports/solution_brief.md`
@@ -57,6 +59,15 @@ python /Users/amlfarhad/.agents/skills/webapp-testing/scripts/with_server.py \
 ```
 
 The journey exercises the seeded sample selection, the automatic/review/blocked operations queues, degraded-provider recovery, and empty-selection validation. It writes a screenshot to `artifacts/browser_journey.png`.
+
+## Workflow configuration
+
+The workbench exposes two execution modes rather than treating configuration as decorative:
+
+- **Simulation** runs the mock provider contract in memory, records metadata/link/approval audit events, and shows the resulting operations queues.
+- **Dry run** evaluates the same policy logic but projects metadata, links, and approvals without mutating the mock provider or writing audit events.
+
+The acceptance controls and their limits are documented in [`docs/evaluation.md`](docs/evaluation.md).
 
 ## Public demo boundaries
 

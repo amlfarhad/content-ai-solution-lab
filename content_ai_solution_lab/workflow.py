@@ -17,6 +17,9 @@ def run_workflow(items: Iterable[ContentItem], item_ids: Iterable[str], *, mode:
     provider adapter without changing the decision contract.
     """
 
+    if mode not in {"simulation", "dry_run"}:
+        raise ValueError("mode must be simulation or dry_run")
+
     selected_ids = tuple(dict.fromkeys(item_ids))
     platform = ContentPlatformMock(tuple(items))
     agent = ContentAIAgent(platform)
@@ -35,19 +38,42 @@ def run_workflow(items: Iterable[ContentItem], item_ids: Iterable[str], *, mode:
             }
             if decision["policy_flags"]:
                 metadata_patch["policy_flags"] = ", ".join(decision["policy_flags"])
-            updated = platform.update_metadata(item_id, **metadata_patch)
-
-            actions: dict[str, object] = {"metadata_updated": True}
-            if decision["disposition"] == "auto_process":
-                actions["shared_link"] = platform.create_shared_link(item_id, "internal-workflow")
+            if mode == "dry_run":
+                updated = item
+                actions: dict[str, object] = {
+                    "metadata_update": {"status": "projected", "patch": metadata_patch},
+                }
+                if decision["disposition"] == "auto_process":
+                    actions["shared_link"] = {
+                        "status": "projected",
+                        "audience": "internal-workflow",
+                        "url": platform.preview_shared_link(item_id, "internal-workflow"),
+                    }
+                else:
+                    status = "blocked_pending_review" if decision["disposition"] == "blocked" else "pending_review"
+                    actions["approval"] = {
+                        "status": "projected",
+                        "packet": {
+                            "item_id": item.item_id,
+                            "title": item.title,
+                            "approver": decision["approver"],
+                            "status": status,
+                            "reason": decision["rationale"],
+                        },
+                    }
             else:
-                status = "blocked_pending_review" if decision["disposition"] == "blocked" else "pending_review"
-                actions["approval"] = platform.route_for_approval(
-                    item_id,
-                    str(decision["approver"]),
-                    status=status,
-                    reason=str(decision["rationale"]),
-                )
+                updated = platform.update_metadata(item_id, **metadata_patch)
+                actions = {"metadata_updated": True}
+                if decision["disposition"] == "auto_process":
+                    actions["shared_link"] = platform.create_shared_link(item_id, "internal-workflow")
+                else:
+                    status = "blocked_pending_review" if decision["disposition"] == "blocked" else "pending_review"
+                    actions["approval"] = platform.route_for_approval(
+                        item_id,
+                        str(decision["approver"]),
+                        status=status,
+                        reason=str(decision["rationale"]),
+                    )
 
             results.append(
                 {

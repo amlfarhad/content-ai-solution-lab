@@ -172,6 +172,13 @@
           <div class="run-callout" id="run-callout">
             <div class="run-callout-mark" aria-hidden="true">◎</div>
             <div><strong>Ready to test the decision path?</strong><p>Select at least one item. The run will apply mock metadata, create an internal link for safe items, and route sensitive or unsafe items to a visible human gate.</p></div>
+            <div class="run-mode-control">
+              <label class="field-label" for="run-mode">EXECUTION MODE</label>
+              <select class="field-input" id="run-mode">
+                <option value="simulation">Simulation · mock actions</option>
+                <option value="dry_run">Dry run · no writes</option>
+              </select>
+            </div>
             <button class="button button-primary" id="run-workflow" type="button">Run policy workflow <span aria-hidden="true">↗</span></button>
           </div>
         </section>

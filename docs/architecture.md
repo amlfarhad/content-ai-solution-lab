@@ -22,6 +22,7 @@
 - API actions are represented by a mock platform class. This demonstrates product/API thinking without claiming access to a real enterprise tenant.
 - Governance is first-class: each decision includes access, audit, retention, sensitivity, confidence, rationale, next action, and policy flags alongside the AI workflow.
 - Failure isolation: a missing content ID becomes an item-level failure in a partial run instead of hiding successful decisions.
+- Explicit execution modes: simulation records mock provider actions; dry run projects the same actions without mutating metadata or audit state.
 - The generated dashboard and browser workbench are customer-demo artifacts, not backend admin screens. The goal is to show how a solutions engineer would connect product capabilities to business problems.
 
 ## Data Flow

@@ -223,13 +223,14 @@
       return;
     }
     const button = $("#run-workflow");
+    const mode = $("#run-mode").value;
     button.disabled = true;
     button.textContent = "Running decision path…";
     setRunStatus("running", "Processing sample");
     try {
       state.lastRun = state.connected
-        ? await apiPost("/api/run", { item_ids: [...state.selectedIds], mode: "simulation" })
-        : fallbackRun([...state.selectedIds]);
+        ? await apiPost("/api/run", { item_ids: [...state.selectedIds], mode })
+        : fallbackRun([...state.selectedIds], mode);
       renderRun(state.lastRun);
       document.getElementById("stage-ops").scrollIntoView({ behavior: "smooth", block: "start" });
     } catch (error) {
@@ -244,7 +245,8 @@
   function renderRun(run) {
     const summary = run.summary || {};
     const status = run.status === "partial" ? "partial" : run.status === "complete" ? "complete" : "error";
-    setRunStatus(status, status === "complete" ? `${run.run_id} · complete` : status === "partial" ? `${run.run_id} · partial` : `${run.run_id} · failed`);
+    const modeLabel = run.mode === "dry_run" ? "dry run" : "simulation";
+    setRunStatus(status, status === "complete" ? `${run.run_id} · ${modeLabel} · complete` : status === "partial" ? `${run.run_id} · ${modeLabel} · partial` : `${run.run_id} · ${modeLabel} · failed`);
     $("#run-summary").innerHTML = `<div class="summary-metrics">
       <div class="summary-metric metric-run"><strong>${escapeHTML(run.run_id || "—")}</strong><span>sample run</span></div>
       <div class="summary-metric metric-auto"><strong>${escapeHTML(summary.auto_process || 0)}</strong><span>proceed automatically</span></div>
@@ -301,6 +303,7 @@
       return;
     }
     const decision = result.decision;
+    const isProjected = result.actions && result.actions.metadata_update && result.actions.metadata_update.status === "projected";
     $("#detail-id").textContent = result.item_id;
     empty.hidden = true;
     content.hidden = false;
@@ -309,6 +312,7 @@
       <div class="detail-decision-grid"><div class="detail-stat"><span>Route</span><strong>${escapeHTML(decision.classification)}</strong></div><div class="detail-stat"><span>Confidence</span><strong>${escapeHTML(decision.confidence)}</strong></div><div class="detail-stat"><span>Retention</span><strong>${escapeHTML(decision.retention_policy)}</strong></div></div>
       <div class="detail-block"><p class="detail-label">Why this route</p><p>${escapeHTML(decision.rationale)}</p></div>
       <div class="detail-block"><p class="detail-label">Next action</p><p>${escapeHTML(decision.next_action)}</p></div>
+      <div class="detail-block"><p class="detail-label">Execution result</p><p>${isProjected ? "Dry run projected this metadata and downstream action. No provider write or audit event was created." : "Simulation applied the mock provider action in memory and recorded it in the audit trail."}</p></div>
       <div class="detail-block"><p class="detail-label">Policy flags</p><div class="detail-flags">${(decision.policy_flags || []).length ? decision.policy_flags.map((flag) => `<span class="detail-flag">${escapeHTML(flag)}</span>`).join("") : '<span class="mini-pill">none detected</span>'}</div></div>`;
   }
 
@@ -358,7 +362,7 @@
     return { disposition: "auto_process" };
   }
 
-  function fallbackRun(itemIds) {
+  function fallbackRun(itemIds, mode = "simulation") {
     const results = [];
     const audit = [];
     for (const itemId of [...new Set(itemIds)]) {
@@ -368,14 +372,26 @@
         continue;
       }
       const decision = fallbackDecision(item);
-      audit.push({ action: "metadata.updated", item_id: itemId, detail: `Updated [classification, confidence, disposition, retention_policy, risk_level]` });
-      const actions = { metadata_updated: true };
-      if (decision.disposition === "auto_process") {
-        actions.shared_link = `https://content.example/shared/${hashToken(`${itemId}:internal-workflow`)}`;
-        audit.push({ action: "shared_link.created", item_id: itemId, detail: "Audience=internal-workflow" });
+      const metadataPatch = { classification: decision.classification, retention_policy: decision.retention_policy, confidence: decision.confidence, disposition: decision.disposition, risk_level: decision.risk_level, policy_flags: decision.policy_flags.join(", ") };
+      let actions;
+      if (mode === "dry_run") {
+        actions = { metadata_update: { status: "projected", patch: metadataPatch } };
+        if (decision.disposition === "auto_process") {
+          actions.shared_link = { status: "projected", audience: "internal-workflow", url: `https://content.example/shared/${hashToken(`${itemId}:internal-workflow`)}` };
+        } else {
+          const approvalStatus = decision.disposition === "blocked" ? "blocked_pending_review" : "pending_review";
+          actions.approval = { status: "projected", packet: { item_id: itemId, title: item.title, approver: decision.approver, status: approvalStatus, reason: decision.rationale } };
+        }
       } else {
-        actions.approval = { item_id: itemId, title: item.title, approver: decision.approver, status: decision.disposition === "blocked" ? "blocked_pending_review" : "pending_review", reason: decision.rationale };
-        audit.push({ action: "approval.routed", item_id: itemId, detail: `Approver=${decision.approver}; Status=${actions.approval.status}; Reason=${decision.rationale}` });
+        audit.push({ action: "metadata.updated", item_id: itemId, detail: `Updated [classification, confidence, disposition, retention_policy, risk_level]` });
+        actions = { metadata_updated: true };
+        if (decision.disposition === "auto_process") {
+          actions.shared_link = `https://content.example/shared/${hashToken(`${itemId}:internal-workflow`)}`;
+          audit.push({ action: "shared_link.created", item_id: itemId, detail: "Audience=internal-workflow" });
+        } else {
+          actions.approval = { item_id: itemId, title: item.title, approver: decision.approver, status: decision.disposition === "blocked" ? "blocked_pending_review" : "pending_review", reason: decision.rationale };
+          audit.push({ action: "approval.routed", item_id: itemId, detail: `Approver=${decision.approver}; Status=${actions.approval.status}; Reason=${decision.rationale}` });
+        }
       }
       results.push({ item_id: itemId, title: item.title, status: "processed", item: { department: item.department, content_type: item.content_type, sensitivity: item.sensitivity, lifecycle_stage: item.lifecycle_stage, owner: item.owner }, decision, actions, summary: `${item.title}: ${item.text.split(/\s+/).slice(0, 24).join(" ")}${item.text.split(/\s+/).length > 24 ? "…" : ""}` });
     }
@@ -387,7 +403,7 @@
       {id:"explainable-routing",label:"Every route has a reason",passed:processed.every((result) => result.decision.rationale && result.decision.next_action),detail:"Each processed item includes confidence, policy flags, rationale, and next action."},
       {id:"failure-isolation",label:"Item failures stay isolated",passed:results.filter((result) => result.status === "failed").length === 0 || processed.length > 0,detail:"A missing item is reported without hiding successful decisions for the rest of the run."}
     ];
-    return { run_id: `RUN-${hashToken([...new Set(itemIds)].join(",")).slice(0, 8).toUpperCase()}`, mode: "simulation", status: results.some((result) => result.status === "failed") ? (processed.length ? "partial" : "failed") : "complete", summary: {selected:itemIds.length,processed:processed.length,failed:results.length-processed.length,auto_process:count("auto_process"),needs_review:count("needs_review"),blocked:count("blocked")},results,evaluation:{status:controls.every((control) => control.passed) ? "pass" : "review",passed:controls.filter((control) => control.passed).length,total:controls.length,controls},audit_log:audit};
+    return { run_id: `RUN-${hashToken([...new Set(itemIds)].join(",")).slice(0, 8).toUpperCase()}`, mode, status: results.some((result) => result.status === "failed") ? (processed.length ? "partial" : "failed") : "complete", summary: {selected:itemIds.length,processed:processed.length,failed:results.length-processed.length,auto_process:count("auto_process"),needs_review:count("needs_review"),blocked:count("blocked")},results,evaluation:{status:controls.every((control) => control.passed) ? "pass" : "review",passed:controls.filter((control) => control.passed).length,total:controls.length,controls},audit_log:audit};
   }
 
   function fallbackDecision(item) {

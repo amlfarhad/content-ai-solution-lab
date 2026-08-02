@@ -39,11 +39,17 @@ class ContentPlatformMock:
         return updated
 
     def create_shared_link(self, item_id: str, audience: str) -> str:
+        link = self.preview_shared_link(item_id, audience)
         item = self.get_item(item_id)
-        token = hashlib.sha1(f"{item.item_id}:{audience}".encode("utf-8")).hexdigest()[:12]
-        link = f"https://content.example/shared/{token}"
         self._audit("shared_link.created", item.item_id, f"Audience={audience}")
         return link
+
+    def preview_shared_link(self, item_id: str, audience: str) -> str:
+        """Return the deterministic link that would be created, without auditing it."""
+
+        item = self.get_item(item_id)
+        token = hashlib.sha1(f"{item.item_id}:{audience}".encode("utf-8")).hexdigest()[:12]
+        return f"https://content.example/shared/{token}"
 
     def route_for_approval(
         self,
